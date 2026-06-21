@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +48,13 @@ public class GroupMemberServiceImpl implements GroupMemberService {
     }
 
     @Override
+    public Optional<GroupMember> findByGidAndUid(Long gid, Long uid) {
+        return groupMemberRepository.findByGidAndUid(gid, uid);
+    }
+
+    @Override
     public GroupMember getByGidAndUid(Long gid, Long uid) {
-        return groupMemberRepository.findByGidAndUid(gid, uid)
+        return this.findByGidAndUid(gid, uid)
                 .orElseThrow(() -> new BusinessException(ErrorCode.GROUP_MEMBER_NOT_FOUND));
     }
 

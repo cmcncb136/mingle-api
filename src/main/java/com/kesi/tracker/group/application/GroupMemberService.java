@@ -4,9 +4,11 @@ import com.kesi.tracker.group.domain.GroupMember;
 import com.kesi.tracker.group.domain.GroupMemberStatus;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupMemberService {
     GroupMember getApprovedByGidAndUid(Long gid, Long uid);
+    Optional<GroupMember> findByGidAndUid(Long gid, Long uid);
     GroupMember getByGidAndUid(Long gid, Long uid);
     GroupMember getById(Long id);
     List<GroupMember> findByGidAndRoleIsLeader(Long gid);
