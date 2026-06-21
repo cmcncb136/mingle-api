@@ -172,7 +172,12 @@ public class GroupServiceImpl implements GroupService {
         Group group = getByGid(gid);
 
         if (group.isPrivate()) { //PRIVATE인 그룹인 경우
-            if (!groupMemberService.isGroupMember(gid, currentUid)) //GROUP에 속한 경우만 확인 가능
+            //그룹간에 관계 조회 (없다면 권한이 없다는 예외 발생)
+            GroupMember groupMember = groupMemberService.findByGidAndUid(gid, currentUid)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.HANDLE_ACCESS_DENIED));
+
+            if (!(groupMember.isApproved()  //Group 속해 있거나
+                    || GroupMemberStatus.INVITED.equals(groupMember.getStatus()))) //Group에 초대 받은 경우만 허용
                 throw new BusinessException(ErrorCode.HANDLE_ACCESS_DENIED);
         }
 
